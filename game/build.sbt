@@ -12,6 +12,6 @@ lazy val root = project
     libraryDependencies ++= Seq(
       "org.scalactic" %% "scalactic" % "3.2.15",
       "org.scalatest" %% "scalatest" % "3.2.15" % Test,
-      "org.scalatestplus" %% "easymock-5-1" % "3.2.15.0" % Test
+      //"org.scalatestplus" %% "easymock-5-1" % "3.2.15.0" % Test
     )
   )
