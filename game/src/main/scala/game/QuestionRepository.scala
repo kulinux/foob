@@ -5,5 +5,9 @@ trait QuestionRepository {
 }
 
 object QuestionRepository {
-    def apply() = ???
+    def apply(): QuestionRepository = QuestionRepositoryImpl()
+}
+
+class QuestionRepositoryImpl extends QuestionRepository {
+  override def nextQuestion(): Question = ???
 }

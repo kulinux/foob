@@ -5,5 +5,9 @@ trait UserScreen {
 }
 
 object UserScreen {
-    def apply() = ???
+    def apply(): UserScreen = UserScreenImpl()
+}
+
+class UserScreenImpl extends UserScreen {
+  override def showAll(question: String): Unit = ???
 }
