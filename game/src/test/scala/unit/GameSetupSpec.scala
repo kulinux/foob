@@ -2,19 +2,19 @@ package game
 
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
+import org.scalatestplus.easymock.EasyMockSugar
 
-class GameSetupSpec extends AnyFreeSpec with Matchers {
+class GameSetupSpec extends AnyFreeSpec with Matchers with EasyMockSugar {
     "Game should be initiated with joined players" in {
-        val juan: UserId = ???
-        val marcos: UserId = ???
+        val juan: UserId = mock[UserId]
+        val marcos: UserId = mock[UserId]
         val gameSetup = GameSetup()
 
-        gameSetup.join(juan)
-        gameSetup.join(marcos)
+        val game = gameSetup
+            .join(juan)
+            .join(marcos)
+            .start()
 
-        gameSetup.start()
-
-        verify(Game.apply(Seq(juan, marcos)))
+        game.players() should contain only (juan, marcos)
     }
-  
 }

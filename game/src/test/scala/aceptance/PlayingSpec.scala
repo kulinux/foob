@@ -5,14 +5,14 @@ import org.scalatest._
 import flatspec._
 import matchers._
 import org.scalatest.freespec.AnyFreeSpec
-//import org.scalatestplus.easymock.EasyMockSugar
+import org.scalatestplus.easymock.EasyMockSugar
 
-class GameSpec extends AnyFreeSpec with should.Matchers /*with EasyMockSugar*/ {
+class PlayingSpec extends AnyFreeSpec with should.Matchers with EasyMockSugar {
   "A user should join and start a game" in {
-    val gameDef: GameSetup = ???
-    val juan: UserId = ???
-    val marcos: UserId = ???
-    val play: Play = ???
+    val gameDef: GameSetup = GameSetup()
+    val juan: UserId = mock[UserId]
+    val marcos: UserId = mock[UserId]
+    val play: Play = mock[Play]
 
     gameDef.join(juan)
     gameDef.join(marcos)
