@@ -1,3 +1,4 @@
+package game
 
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest._
