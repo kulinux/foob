@@ -1,15 +1,14 @@
 package game
 
 import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest._
-import flatspec._
-import matchers._
+import org.scalatest.*
+import flatspec.*
+import matchers.*
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatestplus.easymock.EasyMockSugar
+import game.core.{Game, GameSetup, Play, QuestionRepository, UserId, UserScreen, GameImpl}
 
-import game.core.Game
-import game.core.GameSetup
-import game.core.{UserId, Play}
+import game.infraestructure.question.TriviaApiQuestionRepository
 class PlayingSpec extends AnyFreeSpec with should.Matchers with EasyMockSugar {
   "A user should join and start a game" in {
     val gameDef: GameSetup = GameSetup()
@@ -20,7 +19,9 @@ class PlayingSpec extends AnyFreeSpec with should.Matchers with EasyMockSugar {
     gameDef.join(juan)
     gameDef.join(marcos)
 
-    val game: Game = gameDef.start()
+    val game: Game = gameDef.start(
+      GameImpl(_, TriviaApiQuestionRepository(), ConsoleUserScreen())
+    )
 
     game.showChallenge()
 
@@ -29,5 +30,8 @@ class PlayingSpec extends AnyFreeSpec with should.Matchers with EasyMockSugar {
 
     game.winner()
   }
+}
 
+class ConsoleUserScreen extends UserScreen {
+  override def showAll(question: String): Unit = println(question)
 }

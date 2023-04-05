@@ -3,15 +3,12 @@ package game.core
 import game.core.{UserId, Play}
 import game.core.QuestionRepository
 import game.core.UserScreen
+
 trait Game {
   def showChallenge(): Unit
   def answer(userId: UserId, play: Play): Unit
   def winner(): UserId
   def players(): Seq[UserId]
-}
-
-object Game {
-  def apply(initPlayers: Seq[UserId]): Game = GameImpl(initPlayers, QuestionRepository(), UserScreen())
 }
 
 class GameImpl(
