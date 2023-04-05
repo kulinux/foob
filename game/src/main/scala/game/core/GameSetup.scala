@@ -1,5 +1,7 @@
-package game
+package game.core
 
+import game.core.Game
+import game.core.UserId
 trait GameSetup {
     def join(user: UserId): GameSetup
     def start(): Game

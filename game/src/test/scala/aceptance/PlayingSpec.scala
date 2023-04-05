@@ -7,6 +7,9 @@ import matchers._
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatestplus.easymock.EasyMockSugar
 
+import game.core.Game
+import game.core.GameSetup
+import game.core.{UserId, Play}
 class PlayingSpec extends AnyFreeSpec with should.Matchers with EasyMockSugar {
   "A user should join and start a game" in {
     val gameDef: GameSetup = GameSetup()

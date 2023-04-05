@@ -1,9 +1,11 @@
-package game
+package game.core
 
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.easymock.EasyMockSugar
 
+import game.core.GameSetup
+import game.core.UserId
 class GameSetupSpec extends AnyFreeSpec with Matchers with EasyMockSugar {
     "Game should be initiated with joined players" in {
         val juan: UserId = mock[UserId]
