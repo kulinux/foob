@@ -7,12 +7,9 @@ import game.core.UserScreen
 trait Game {
   def showChallenge(): Unit
   def answer(userId: UserId, play: Play): Unit
-  def winner(): UserId
-  def players(): Seq[UserId]
 }
 
 class GameImpl(
-    initPlayers: Seq[UserId],
     questions: QuestionRepository,
     userScreen: UserScreen
 ) extends Game {
@@ -20,7 +17,9 @@ class GameImpl(
     val question = questions.nextQuestion()
     userScreen.showAll(question.question)
   }
-  override def answer(userId: UserId, play: Play): Unit = ???
-  override def winner(): UserId = ???
-  override def players(): Seq[UserId] = initPlayers
+  override def answer(userId: UserId, play: Play): Unit = {
+    if(questions.verify(play)) {
+      userScreen.winner(userId)
+    }
+  }
 }

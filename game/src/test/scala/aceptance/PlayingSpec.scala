@@ -16,11 +16,8 @@ class PlayingSpec extends AnyFreeSpec with should.Matchers with EasyMockSugar {
     val marcos: UserId = mock[UserId]
     val play: Play = mock[Play]
 
-    gameDef.join(juan)
-    gameDef.join(marcos)
-
-    val game: Game = gameDef.start(
-      GameImpl(_, TriviaApiQuestionRepository(), ConsoleUserScreen())
+    val game: Game = gameDef.start(() => 
+      GameImpl(TriviaApiQuestionRepository(), ConsoleUserScreen())
     )
 
     game.showChallenge()
@@ -28,10 +25,12 @@ class PlayingSpec extends AnyFreeSpec with should.Matchers with EasyMockSugar {
     game.answer(juan, play)
     game.answer(marcos, play)
 
-    game.winner()
   }
 }
 
 class ConsoleUserScreen extends UserScreen {
-  override def showAll(question: String): Unit = println(question)
+
+  override def winner(userId: UserId): Unit = println(s"Winner $userId")
+
+  override def showAll(question: String): Unit = println(s"Question $question")
 }

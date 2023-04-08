@@ -28,10 +28,33 @@ class GameSpec extends AnyFreeSpec with EasyMockSugar {
     replay(questions)
     replay(usersScreen)
 
-    val game = GameImpl(Seq(), questions, usersScreen)
+    val game = GameImpl(questions, usersScreen)
     game.showChallenge()
 
     verify(questions)
     verify(usersScreen)
+  }
+
+  "game should show winner" in {
+    val juan = new UserId {}
+    val play = mock[Play]
+    val questions: QuestionRepository = mock[QuestionRepository]
+    val usersScreen: UserScreen = mock[UserScreen]
+
+    val game = GameImpl(questions, usersScreen)
+
+    expecting {
+      questions.verify(play) andReturn true
+    }
+    expecting {
+      usersScreen.winner(juan)
+    }
+
+    replay(questions)
+    replay(usersScreen)
+    game.answer(juan, play)
+    verify(questions)
+    verify(usersScreen)
+
   }
 }

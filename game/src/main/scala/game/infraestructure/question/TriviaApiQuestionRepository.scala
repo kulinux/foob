@@ -1,6 +1,6 @@
 package game.infraestructure.question
 
-import game.core.{Question, QuestionRepository}
+import game.core.{Question, Play, QuestionRepository}
 import sttp.client3.upicklejson.*
 import sttp.client3.{SimpleHttpClient, UriContext, basicRequest}
 import upickle.default.*
@@ -22,4 +22,8 @@ class TriviaApiQuestionRepository(
     buffer = buffer.tail
     res
   }
+
+  override def verify(play: Play): Boolean = ???
+
+  
 }
