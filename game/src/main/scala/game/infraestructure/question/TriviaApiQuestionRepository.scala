@@ -23,7 +23,6 @@ class TriviaApiQuestionRepository(
     res
   }
 
-  override def verify(play: Play): Boolean = ???
 
   
 }

@@ -2,6 +2,6 @@ package game.core
 
 trait UserId
 
-trait Play
+case class Play(answer: String)
 
 case class Question(question: String, answer: String)
