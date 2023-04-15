@@ -6,33 +6,41 @@ import flatspec.*
 import matchers.*
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatestplus.easymock.EasyMockSugar
-import game.core.{Game, GameSetup, Play, QuestionRepository, UserId, UserScreen, GameImpl}
+import game.core.{Game, Play, QuestionRepository, UserId, UserScreen, GameImpl}
+import org.easymock.EasyMock._
 
 import game.infraestructure.question.TriviaApiQuestionRepository
 class PlayingSpec extends AnyFreeSpec with should.Matchers with EasyMockSugar {
   "A user should join and start a game" in {
-    val gameDef: GameSetup = GameSetup()
     val juan: UserId = mock[UserId]
     val marcos: UserId = mock[UserId]
     val play: Play = Play("my answer")
 
-    val game: Game = gameDef.start(() => 
-      GameImpl(TriviaApiQuestionRepository(), ConsoleUserScreen())
-    )
+    val userSreen: ConsoleUserScreen = ConsoleUserScreen()
+    val game: Game = 
+      GameImpl(TriviaApiQuestionRepository(), userSreen)
+
+    userSreen.publisher = game.answer
 
     game.showChallenge()
 
-    game.answer(juan, play)
-    game.answer(marcos, play)
-
+    userSreen.answer(juan, play)
+    userSreen.answer(marcos, play)
   }
+
 }
 
 class ConsoleUserScreen extends UserScreen {
+
+  var publisher: (UserId, Play) => Unit = (_, _) => {}
+
+  override def answer(user: UserId, answer: Play): Unit = publisher
 
   override def winner(userId: UserId): Unit = println(s"Winner $userId")
 
   override def showAll(question: String): Unit = println(s"Question $question")
 
   override def wrong(): Unit = println(s"Answer is wrong")
+
+
 }

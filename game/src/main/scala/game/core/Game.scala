@@ -16,6 +16,7 @@ class GameImpl(
     userScreen: UserScreen
 ) extends Game {
 
+
   var currentQuestion: Option[Question] = Option.empty
   override def showChallenge(): Unit = {
     currentQuestion = questions.nextQuestion().some

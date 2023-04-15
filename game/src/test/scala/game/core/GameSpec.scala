@@ -36,7 +36,7 @@ class GameSpec extends AnyFreeSpec with EasyMockSugar {
   }
 
   "game should show winner when win" in {
-    val juan = new UserId {}
+    val juan = UserId("juan")
     val play = Play("correct answer")
     val questions: QuestionRepository = mock[QuestionRepository]
     val usersScreen: UserScreen = mock[UserScreen]
@@ -59,7 +59,7 @@ class GameSpec extends AnyFreeSpec with EasyMockSugar {
   }
 
   "game should not show winner when not win" in {
-    val juan = new UserId {}
+    val juan = UserId("juan")
     val play = Play("incorrect answer")
     val questions: QuestionRepository = mock[QuestionRepository]
     val usersScreen: UserScreen = mock[UserScreen]
