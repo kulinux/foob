@@ -11,11 +11,15 @@ trait Game {
   def answer(userId: UserId, play: Play): Unit
 }
 
+object Game {
+  def apply(questions: QuestionRepository, userScreen: UserScreen) =
+    GameImpl(questions, userScreen)
+}
+
 class GameImpl(
     questions: QuestionRepository,
     userScreen: UserScreen
 ) extends Game {
-
 
   var currentQuestion: Option[Question] = Option.empty
   override def showChallenge(): Unit = {
