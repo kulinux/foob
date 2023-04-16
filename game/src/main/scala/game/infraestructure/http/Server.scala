@@ -3,47 +3,55 @@ package game.infraestructure.http
 import cats.effect._, org.http4s._, org.http4s.dsl.io._
 
 import cats.syntax.all._
+
+import cats.effect.{ExitCode, IO, IOApp, Resource}
+import cats.effect.unsafe.IORuntime
+import fs2.{Pipe, Stream}
+
 import com.comcast.ip4s._
-import org.http4s.ember.server._
 import org.http4s.implicits._
 import org.http4s.server.Router
-import scala.concurrent.duration._
-import cats.effect.{ExitCode, IO, IOApp, Resource}
-import fs2.{Pipe, Stream}
-import org.http4s.HttpRoutes
-import org.http4s.dsl.io._
 import org.http4s.ember.server.EmberServerBuilder
+import org.http4s.websocket.WebSocketFrame
+import org.http4s.websocket.WebSocketFrame.Text
 import org.http4s.server.Server
 import org.http4s.server.websocket.WebSocketBuilder2
-import org.http4s.websocket.WebSocketFrame
 import java.time.Instant
+
 import scala.concurrent.duration._
 
-import cats.effect.unsafe.IORuntime
-import org.http4s.ember.server.EmberServerBuilder
-import game.core.GameImpl
-import game.core.UserScreen
+import io.circe.generic.auto._
+import io.circe.syntax._
+import org.http4s.circe._
+
+
 implicit val runtime: IORuntime = cats.effect.unsafe.IORuntime.global
 
 trait App {
-  def buildApp(): (Pipe[IO, String, Unit], Stream[IO, WebSocketFrame])
-}
-
-trait WebSocketRoutes {
-  def routes(ws: WebSocketBuilder2[IO]): HttpRoutes[IO] =
-    HttpRoutes.of[IO] { case GET -> Root / "ws" =>
-      val send: Stream[IO, WebSocketFrame] =
+  def buildApp(): (Pipe[IO, String, Unit], Stream[IO, String]) = {
+      val out: Stream[IO, String] =
         Stream
           .awakeEvery[IO](1.second)
-          .evalMap(_ => IO(WebSocketFrame.Text("ok")))
+          .evalMap(_ => IO("ok"))
 
-      val receive: Pipe[IO, WebSocketFrame, Unit] =
+      val in: Pipe[IO, String, Unit] =
         in =>
           in.evalMap(frameIn => IO(println("in " + frameIn)))
 
-      //val (in, out) = buildApp()
+      return (in, out)
+  }
+}
 
-      ws.build(send, receive)
+trait WebSocketRoutes extends App {
+  def routes(ws: WebSocketBuilder2[IO]): HttpRoutes[IO] =
+    HttpRoutes.of[IO] { case GET -> Root / "ws" =>
+      val (in, out) = buildApp()
+
+      val send = out.map(str => WebSocketFrame.Text(str))
+
+      val receive: Pipe[IO, WebSocketFrame, String] = in => in.map(_.asInstanceOf[Text].str)
+
+      ws.build(send, receive andThen in)
     }
 
 }
