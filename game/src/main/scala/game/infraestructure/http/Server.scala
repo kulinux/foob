@@ -41,6 +41,7 @@ trait WebSocketRoutes extends App {
         .map(str => parse(str).right.get)
         .map(json => jsonDecode.decodeJson(json).right.get)
         .map(app(_))
+        .merge(asyncStream())
         .recover(err => Command("error", s"error on command $err"))
         .map(str => WebSocketFrame.Text(jsonEncode(str).toString))
   }
