@@ -20,40 +20,35 @@ import java.time.Instant
 
 import scala.concurrent.duration._
 
-import io.circe.generic.auto._
-import io.circe.syntax._
-import org.http4s.circe._
+import io.circe._, io.circe.generic.semiauto._, io.circe.parser._
+import java.net.http.WebSocket
+
+import game.infraestructure.app.{Command, App}
+
+
+given jsonEncode: Encoder[Command] = deriveEncoder[Command]
+given jsonDecode: Decoder[Command] = deriveDecoder[Command]
 
 
 implicit val runtime: IORuntime = cats.effect.unsafe.IORuntime.global
 
-trait App {
-  def buildApp(): (Pipe[IO, String, Unit], Stream[IO, String]) = {
-      val out: Stream[IO, String] =
-        Stream
-          .awakeEvery[IO](1.second)
-          .evalMap(_ => IO("ok"))
-
-      val in: Pipe[IO, String, Unit] =
-        in =>
-          in.evalMap(frameIn => IO(println("in " + frameIn)))
-
-      return (in, out)
-  }
-}
 
 trait WebSocketRoutes extends App {
+
+  def inOutWsFunc(in: Stream[IO, WebSocketFrame]): Stream[IO, WebSocketFrame] = {
+     in
+        .map(_.asInstanceOf[Text].str)
+        .map(str => parse(str).right.get)
+        .map(json => jsonDecode.decodeJson(json).right.get)
+        .map(app(_))
+        .recover(err => Command("error", s"error on command $err"))
+        .map(str => WebSocketFrame.Text(jsonEncode(str).toString))
+  }
+
   def routes(ws: WebSocketBuilder2[IO]): HttpRoutes[IO] =
     HttpRoutes.of[IO] { case GET -> Root / "ws" =>
-      val (in, out) = buildApp()
-
-      val send = out.map(str => WebSocketFrame.Text(str))
-
-      val receive: Pipe[IO, WebSocketFrame, String] = in => in.map(_.asInstanceOf[Text].str)
-
-      ws.build(send, receive andThen in)
+      ws.build(inOutWsFunc)
     }
-
 }
 
 object Server extends IOApp.Simple with WebSocketRoutes {
