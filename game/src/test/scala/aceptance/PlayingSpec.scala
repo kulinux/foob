@@ -11,10 +11,11 @@ import org.easymock.EasyMock._
 
 import game.infraestructure.question.TriviaApiQuestionRepository
 import game.infraestructure.question.TriviaApiQuestion
+
 class PlayingSpec extends AnyFreeSpec with should.Matchers with EasyMockSugar {
   "A user should join and start a game" in {
-    val juan: UserId = mock[UserId]
-    val marcos: UserId = mock[UserId]
+    val juan: UserId = UserId("Juan")
+    val marcos: UserId = UserId("Marcos")
     val play: Play = Play("my answer")
 
     val userSreen: UserScreen = ConsoleUserScreen()

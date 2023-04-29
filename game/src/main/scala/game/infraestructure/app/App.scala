@@ -29,7 +29,7 @@ class AppGame(val game: Game, userSreen: WebUserScreen) {
       return Command("responseCommand", "ok")
     }
      if (cm.command == "answer") {
-      game.answer(UserId("userId"), Play(cm.arguments))
+      game.answer(UserId(""), Play(cm.arguments))
       return Command("responseCommand", "ok")
     }
     ???
