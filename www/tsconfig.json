@@ -10,8 +10,10 @@
     "skipLibCheck": true
   },
   "include": [
-    "src/**/*.ts",
     "test/**/*.ts"
+  ],
+  "files": [
+    "src/index.ts"
   ],
   "exclude": [
     "build", "node_modules"
