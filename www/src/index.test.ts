@@ -1,8 +1,8 @@
 import {screen, fireEvent} from '@testing-library/dom'
-import { init } from "../src"
-import { gameClient } from "../src/services"
+import { init } from "."
+import { gameClient } from "./services"
 
-jest.mock('../src/services.ts')
+jest.mock('./services.ts')
 
 describe('Game', () => {
     test('should join game on click join', () => {

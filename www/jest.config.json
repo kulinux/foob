@@ -3,5 +3,10 @@
     "verbose": true,
     "preset": "ts-jest",
     "testEnvironment": "jsdom",
-    "testPathIgnorePatterns": ["build"]
+    "testPathIgnorePatterns": [
+        "build"
+    ],
+    "moduleNameMapper": {
+        "^(\\.{1,2}/.*)\\.js$": "$1"
+    }
 }

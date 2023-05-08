@@ -1,4 +1,4 @@
-import { gameClient } from "./services"
+import { gameClient } from "./services.js"
 
 const hello = "Hello"
 
