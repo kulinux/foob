@@ -1,0 +1,27 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      #Install JAVA 8
+      - add-apt-repository ppa:openjdk-r/ppa
+      - apt-get update
+      - apt-get install -y openjdk-8-jdk
+      - java -version
+      #Install sbt
+      - echo "deb https://dl.bintray.com/sbt/debian /" | tee -a /etc/apt/sources.list.d/sbt.list
+      - apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823
+      - apt-get update
+      - apt-get install -y sbt
+  pre_build:
+    commands:
+      - REPOSITORY_NAME=game
+  build:
+    commands:
+      - printf '{"repository":"%s"}' $REPOSITORY_NAME > build.json
+      - sbt test
+      - sbt assembly
+artifacts:
+  files:
+    - target/scala-3.2.2/*.jar
+    - build.json

@@ -27,5 +27,6 @@ lazy val root = project
       "io.circe" %% "circe-generic" % "0.14.5",
       "io.circe" %% "circe-literal" % "0.14.5",
       "io.circe" %% "circe-parser" % "0.14.5"
-    )
+    ),
+    assembly / mainClass := Some(" game.infraestructure.http.Server"),
   )
