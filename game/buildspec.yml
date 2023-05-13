@@ -3,7 +3,10 @@ version: 0.2
 phases:
   install:
     commands:
-      - yum install sbt
+      - sudo rm -f /etc/yum.repos.d/bintray-rpm.repo
+      - curl -L https://www.scala-sbt.org/sbt-rpm.repo > sbt-rpm.repo
+      - sudo mv sbt-rpm.repo /etc/yum.repos.d/
+      - sudo yum install sbt
   pre_build:
     commands:
       - REPOSITORY_NAME=game
