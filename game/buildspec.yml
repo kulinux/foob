@@ -13,9 +13,10 @@ phases:
   build:
     commands:
       - printf '{"repository":"%s"}' $REPOSITORY_NAME > build.json
+      - cd game
       - sbt test
       - sbt assembly
 artifacts:
   files:
-    - target/scala-3.2.2/*.jar
-    - build.json
+    - game/target/scala-3.2.2/*.jar
+    - game/build.json
