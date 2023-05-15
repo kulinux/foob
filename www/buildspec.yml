@@ -1,0 +1,33 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo update npm...
+      - cd www
+      - npm install -g n
+      - n latest
+      - npm update -g npm
+      - echo node -v
+      - node -v
+      - echo npm -v
+      - npm -v
+      - echo install yarn...
+      - npm install -g yarn
+      - echo yarn -v
+      - yarn -v
+  pre_build:
+    commands:
+      - echo Installing source NPM dependencies...
+      - cd www
+      - yarn install
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Compiling the Node.js code
+      - cd www
+      - yarn run build
+artifacts:
+  files:
+    - www/dist/**/*
+
