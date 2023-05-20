@@ -5,7 +5,7 @@ phases:
     commands:
       - echo update npm...
       - cd www
-      - npm install -g n
+      #- npm install -g n
       - n latest
       - npm update -g npm
       - echo node -v
