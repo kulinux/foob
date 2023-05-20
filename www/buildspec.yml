@@ -27,5 +27,5 @@ phases:
       - yarn run build
 artifacts:
   files:
-    - www/dist/**/*
+    - dist/**/*
 
