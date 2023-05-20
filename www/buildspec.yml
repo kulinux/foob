@@ -6,8 +6,8 @@ phases:
       - echo update npm...
       - cd www
       #- npm install -g n
-      - n latest
-      - npm update -g npm
+      #- n latest
+      #- npm update -g npm
       - echo node -v
       - node -v
       - echo npm -v
