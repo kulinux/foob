@@ -12,6 +12,7 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig-build.json",
+    "postbuild": "cp -r './html/' './build/'",
     "watch": "tsc -w -p tsconfig-build.json",
     "prepare": "npm run build",
     "pretest": "npm run build",
